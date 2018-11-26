@@ -8,4 +8,8 @@ node {
 		env.DH="${hostname}"
 		echo "Setting environment variables DH=${env.DH}"
 	}
+
+	stage('Build') {
+	    sh 'make build'
+	}
 }
