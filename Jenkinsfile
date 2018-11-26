@@ -27,8 +27,5 @@ node {
 	    always {
 	        junit 'target/*-reports/*.xml'
 	    }
-	    failure {
-	        mail to: blue@awin.com
-	    }
 	}
 }
