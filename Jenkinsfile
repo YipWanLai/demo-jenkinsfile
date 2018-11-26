@@ -5,11 +5,30 @@ node {
 	}
 
 	stage('Set environment variables') {
-		env.DH="${hostname}"
+		env.DH='d-lhr1-docker-013'
+		//env.DH=${hostname}
 		echo "Setting environment variables DH=${env.DH}"
 	}
 
-	stage('Build') {
-	    sh 'make build'
+	stage('Build and test') {
+	    steps {
+	        // setup test
+	        sh 'make setup-test'
+
+	        // test
+	        sh 'make test'
+
+	        // teardown test
+	        sh 'teardown-test'
+	    }
+	}
+
+	post {
+	    always {
+	        junit 'target/*-reports/*.xml'
+	    }
+	    failure {
+	        mail to: blue@awin.com
+	    }
 	}
 }
