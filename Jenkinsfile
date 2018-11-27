@@ -1,4 +1,8 @@
 node {
+    tools {
+        maven '3.5.3'
+        jdk '1.8.0.172'
+    }
 	stage('Checkout') {
 		sh 'echo Checking out branch: ${BRANCH_NAME}';
 		git url: 'git@github.com:yipwanlai/demo-jenkinsfile.git', branch: '${BRANCH_NAME}';
@@ -10,22 +14,25 @@ node {
 		echo "Setting environment variables DH=${env.DH}"
 	}
 
+	stage('Setup test') {
+	    // setup test
+	    sh 'make setup-test'
+	}
+
 	stage('Build and test') {
-	    steps {
-	        // setup test
-	        sh 'make setup-test'
-
-	        // test
-	        sh 'make test'
-
-	        // teardown test
-	        sh 'teardown-test'
-	    }
+        // test
+        //sh 'make test'
+        maven('verify')
 	}
 
-	post {
-	    always {
-	        junit 'target/*-reports/*.xml'
-	    }
+	stage('Teardown test') {
+	    // teardown test
+	    sh 'make teardown-test'
 	}
+
+	//post {
+	    //always {
+	        //junit 'target/*-reports/*.xml'
+	    //}
+	//}
 }
