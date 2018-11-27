@@ -31,6 +31,7 @@ node {
 	}
 
 	//post {
+
 	    //always {
 	        //junit 'target/*-reports/*.xml'
 	    //}
